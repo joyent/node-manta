@@ -10,6 +10,7 @@ var url = require('url');
 
 var bunyan = require('bunyan');
 var dashdash = require('dashdash');
+var mantaShortenerClient = require('manta-shortener-client');
 
 var manta = require('../lib');
 
@@ -59,6 +60,11 @@ function optionsParser(name) {
                 type: 'arrayOfString',
                 help: 'role tags to apply to the created object',
                 helpArg: 'TAG,TAG...'
+            },
+            {
+                names: ['short', 's'],
+                type: 'bool',
+                help: 'Create a short URL'
             }
         ])
     });
@@ -205,7 +211,24 @@ function parseCmdOptions(opts, parser) {
             // the signed path:
             /* JSSTYLED */
             var uu = opts.url.replace(/\/*$/, '');
-            console.log(uu + resource);
+            if (!opts.short) {
+                console.log(uu + resource);
+                return;
+            }
+            // Shorten the URL using the manta url shortener.
+            var shortenOpts = {
+                expires: opts.expires,
+                url: uu + resource
+            };
+            mantaShortenerClient.shorten(shortenOpts, function (sErr, sUrl) {
+                if (sErr) {
+                    // In the case of a shortening error, show the full url.
+                    console.log(uu + resource);
+                    ifError(sErr);
+                    return;
+                }
+                console.log(sUrl);
+            });
         });
     });
 

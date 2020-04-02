@@ -13,6 +13,8 @@ See `CONTRIBUTING.md` for details on how to update this file
   CHANGES.md should link to GitHub issues
 - [#335](https://github.com/joyent/node-manta/issues/335) Want option to confim
   removal of files for `mrm`
+- [#353](https://github.com/joyent/node-manta/issues/353) add "msign -s"
+  argument to shorten signed urls using the https://i.no.de service.
 
   `mrm -I` and `mrmdir -I` now supported
 - [#62](https://github.com/joyent/node-manta/issues/62) RFE - mls list with human readable format
