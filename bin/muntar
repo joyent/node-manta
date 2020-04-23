@@ -51,7 +51,7 @@ function optionsParser(name) {
             {
                 names: ['file', 'f'],
                 type: 'string',
-                help: 'local file to upload (required)',
+                help: 'local file to upload (required).  Use \'-\' to read from standard input.',
                 helpArg: 'FILE'
             },
             {
@@ -171,7 +171,7 @@ function put(client, path, stream, opts, cb) {
 function worker(client, tarball, callback, log) {
     var entry = 0;
     var inflight = 1;
-    var stream = fs.createReadStream(tarball.file);
+    var stream = (tarball.file == "-") ? process.stdin : fs.createReadStream(tarball.file);
     var pipe = stream.pipe(tar.Parse());
     var options = tarball.options;
 
